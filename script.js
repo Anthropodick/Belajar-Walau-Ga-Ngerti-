@@ -54,19 +54,70 @@
   const toastEl = document.getElementById("toast");
 
   // =====================================================================
-  // INIT
+  // LOGIN / VERIFIKASI KODE — DIPASANG PALING AWAL & PALING AMAN
+  // (supaya kalaupun ada bagian lain error, form tetap tidak submit biasa)
   // =====================================================================
-  schoolNameEl.textContent = SCHOOL_NAME;
-  examTitleEl.textContent = EXAM_TITLE;
-  schoolLogo.src = SCHOOL_LOGO_URL;
-  schoolLogo.onerror = function () {
-    schoolLogo.style.visibility = "hidden";
-  };
+  if (loginForm) {
+    loginForm.addEventListener("submit", function (e) {
+      e.preventDefault();
 
-  fetchExamConfig();
-  updateClock();
-  setInterval(updateClock, 15000);
-  setRandomBattery();
+      if (!configLoaded) {
+        showToast("Data ujian belum siap, tunggu sebentar lalu coba lagi.");
+        return;
+      }
+
+      const kode = kodeInput.value.trim();
+
+      if (!kode) {
+        showToast("Kode ujian belum diisi.");
+        return;
+      }
+
+      if (kode !== examKeyHariIni) {
+        showToast("Kode ujian salah, coba lagi.");
+        kodeInput.value = "";
+        kodeInput.focus();
+        return;
+      }
+
+      enterExam();
+    });
+  } else {
+    console.error("loginForm tidak ditemukan — cek id=\"loginForm\" di index.html");
+  }
+
+  // =====================================================================
+  // INIT — tiap bagian dibungkus try/catch sendiri-sendiri
+  // =====================================================================
+  safeRun(function () {
+    schoolNameEl.textContent = SCHOOL_NAME;
+    examTitleEl.textContent = EXAM_TITLE;
+    schoolLogo.src = SCHOOL_LOGO_URL;
+    schoolLogo.onerror = function () {
+      schoolLogo.style.visibility = "hidden";
+    };
+  }, "init header");
+
+  safeRun(function () {
+    fetchExamConfig();
+  }, "fetchExamConfig");
+
+  safeRun(function () {
+    updateClock();
+    setInterval(updateClock, 15000);
+  }, "updateClock");
+
+  safeRun(function () {
+    setRandomBattery();
+  }, "setRandomBattery");
+
+  function safeRun(fn, label) {
+    try {
+      fn();
+    } catch (err) {
+      console.error("Error di bagian '" + label + "':", err);
+    }
+  }
 
   // =====================================================================
   // FETCH CONFIG DARI GITHUB
@@ -95,34 +146,6 @@
         btnEnter.disabled = false;
       });
   }
-
-  // =====================================================================
-  // LOGIN / VERIFIKASI KODE
-  // =====================================================================
-  loginForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    if (!configLoaded) {
-      showToast("Data ujian belum siap, tunggu sebentar lalu coba lagi.");
-      return;
-    }
-
-    const kode = kodeInput.value.trim();
-
-    if (!kode) {
-      showToast("Kode ujian belum diisi.");
-      return;
-    }
-
-    if (kode !== examKeyHariIni) {
-      showToast("Kode ujian salah, coba lagi.");
-      kodeInput.value = "";
-      kodeInput.focus();
-      return;
-    }
-
-    enterExam();
-  });
 
   function enterExam() {
     loginScreen.hidden = true;
@@ -177,42 +200,41 @@
     timeUpOverlay.hidden = false;
   }
 
-  btnOverlayExit.addEventListener("click", function () {
-    doExit();
-  });
+  safeRun(function () {
+    btnOverlayExit.addEventListener("click", function () {
+      doExit();
+    });
 
-  // =====================================================================
-  // TOMBOL FOOTER
-  // =====================================================================
-  btnHome.addEventListener("click", function () {
-    if (examUrlUjian) examFrame.src = examUrlUjian;
-  });
+    btnHome.addEventListener("click", function () {
+      if (examUrlUjian) examFrame.src = examUrlUjian;
+    });
 
-  btnBack.addEventListener("click", function () {
-    showToast("Tidak bisa navigasi mundur di dalam konten ujian.");
-  });
+    btnBack.addEventListener("click", function () {
+      showToast("Tidak bisa navigasi mundur di dalam konten ujian.");
+    });
 
-  btnForward.addEventListener("click", function () {
-    showToast("Tidak bisa navigasi maju di dalam konten ujian.");
-  });
+    btnForward.addEventListener("click", function () {
+      showToast("Tidak bisa navigasi maju di dalam konten ujian.");
+    });
 
-  btnRefresh.addEventListener("click", function () {
-    // eslint-disable-next-line no-self-assign
-    examFrame.src = examFrame.src;
-  });
+    btnRefresh.addEventListener("click", function () {
+      // eslint-disable-next-line no-self-assign
+      examFrame.src = examFrame.src;
+    });
 
-  btnExit.addEventListener("click", function () {
-    exitConfirmOverlay.hidden = false;
-  });
+    btnExit.addEventListener("click", function () {
+      exitConfirmOverlay.hidden = false;
+    });
 
-  btnExitCancel.addEventListener("click", function () {
-    exitConfirmOverlay.hidden = true;
-  });
+    btnExitCancel.addEventListener("click", function () {
+      exitConfirmOverlay.hidden = true;
+    });
 
-  btnExitConfirm.addEventListener("click", function () {
-    exitConfirmOverlay.hidden = true;
-    doExit();
-  });
+    btnExitConfirm.addEventListener("click", function () {
+      exitConfirmOverlay.hidden = true;
+      doExit();
+    });
+  }, "pasang tombol footer & overlay");
 
   function doExit() {
     clearInterval(countdownInterval);
