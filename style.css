@@ -14,6 +14,14 @@
   box-sizing: border-box;
 }
 
+/* PENTING: paksa elemen ber-atribut hidden selalu tersembunyi,
+   apapun aturan display lain yang menimpanya (mis. .exam-screen, .overlay
+   yang sama-sama set display:flex). Tanpa ini, semua layar numpuk tampil
+   bersamaan sejak halaman dibuka. */
+[hidden] {
+  display: none !important;
+}
+
 html, body {
   margin: 0;
   padding: 0;
