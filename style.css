@@ -1,0 +1,413 @@
+:root {
+  --blue-1: #1E5FDE;
+  --blue-2: #1CA7D6;
+  --blue-3: #2FD3C9;
+  --ink: #16233F;
+  --gray-border: #D7DBE3;
+  --gray-fill: #EEF1F5;
+  --danger: #E5484D;
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: #000;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.screen {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  height: 100vh; /* fallback for older browsers */
+}
+
+/* ===================== LOGIN SCREEN ===================== */
+.login-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 6vh 6vw 5vh;
+  background: linear-gradient(180deg, var(--blue-1) 0%, var(--blue-2) 55%, var(--blue-3) 100%);
+}
+
+.login-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.login-icon {
+  align-self: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.login-app-name {
+  align-self: center;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  margin: 0 0 6vh;
+}
+
+.login-title {
+  color: #ffffff;
+  font-size: clamp(1.5rem, 6vw, 2rem);
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+
+.login-title-underline {
+  width: 56px;
+  height: 3px;
+  background: #ffffff;
+  border-radius: 2px;
+  margin-bottom: 20px;
+}
+
+.login-form {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 12px 30px rgba(10, 30, 70, 0.18);
+}
+
+.login-label {
+  font-size: 0.8rem;
+  color: #667085;
+  margin-bottom: 6px;
+}
+
+.login-input {
+  border: none;
+  border-bottom: 1.5px solid var(--gray-border);
+  padding: 10px 2px;
+  font-size: 1rem;
+  margin-bottom: 18px;
+  outline: none;
+  background: transparent;
+  color: var(--ink);
+}
+
+.login-input:focus {
+  border-bottom-color: var(--blue-1);
+}
+
+.login-submit {
+  border: none;
+  background: var(--blue-1);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  padding: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.login-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-submit:active {
+  transform: translateY(1px);
+}
+
+.login-hint {
+  color: #EAF6FF;
+  font-size: 0.78rem;
+  margin: 14px 4px 0;
+  min-height: 1.2em;
+}
+
+/* ===================== EXAM SCREEN ===================== */
+.exam-screen {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+}
+
+.exam-header {
+  background: #000000;
+  padding: max(10px, env(safe-area-inset-top)) 14px 10px;
+  flex-shrink: 0;
+}
+
+.exam-header-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.school-logo {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.exam-header-text {
+  min-width: 0;
+  flex: 1;
+}
+
+.school-name {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.92rem;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.exam-title {
+  color: #ffffff;
+  font-size: 0.65rem;
+  margin: 2px 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.exam-timer-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.timer-icon {
+  font-size: 0.95rem;
+}
+
+.exam-timer {
+  color: #CFD6E4;
+  font-size: 1rem;
+  font-variant-numeric: tabular-nums;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+.exam-timer.timer-warning {
+  color: #FFB020;
+}
+
+.exam-timer.timer-danger {
+  color: #FF6B6B;
+}
+
+.exam-frame-wrap {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  background: #fafafa;
+}
+
+.exam-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.exam-footer {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px max(8px, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--gray-border);
+  background: #ffffff;
+}
+
+.footer-btn {
+  border-radius: 6px;
+  font-size: 0.85rem;
+  padding: 10px 12px;
+  cursor: pointer;
+  background: var(--gray-fill);
+  border: 1px solid var(--gray-border);
+  color: var(--ink);
+}
+
+.footer-btn-exit {
+  color: var(--danger);
+  background: #ffffff;
+  border-color: var(--danger);
+  flex-shrink: 0;
+}
+
+.footer-btn-square {
+  flex: 1;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.status-box {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  border: 1px solid var(--gray-border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  background: var(--gray-fill);
+}
+
+.status-line {
+  font-size: 0.68rem;
+  color: #475066;
+  white-space: nowrap;
+}
+
+/* ===================== OVERLAYS ===================== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 26, 40, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6vw;
+  z-index: 50;
+}
+
+.overlay-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 30px 24px;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(10, 20, 50, 0.25);
+}
+
+.overlay-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.overlay-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+
+.overlay-message {
+  font-size: 0.88rem;
+  color: #5B667A;
+  margin: 0 0 22px;
+  line-height: 1.4;
+}
+
+.overlay-exit {
+  width: 100%;
+  border: none;
+  background: var(--danger);
+  color: #ffffff;
+  font-weight: 700;
+  padding: 13px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.overlay-btn-row {
+  display: flex;
+  gap: 10px;
+}
+
+.overlay-btn {
+  flex: 1;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.overlay-btn-secondary {
+  background: var(--gray-fill);
+  color: var(--ink);
+}
+
+.overlay-btn-danger {
+  background: var(--danger);
+  color: #ffffff;
+}
+
+/* ===================== TOAST ===================== */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: max(90px, calc(env(safe-area-inset-bottom) + 90px));
+  transform: translateX(-50%);
+  background: #16233F;
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  z-index: 60;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  max-width: 90vw;
+  text-align: center;
+}
+
+/* ===================== SMALL PHONES ===================== */
+@media (max-width: 360px) {
+  .login-form {
+    padding: 18px 16px;
+  }
+  .school-name {
+    font-size: 0.82rem;
+  }
+  .exam-title {
+    font-size: 0.6rem;
+  }
+  .footer-btn {
+    padding: 9px 8px;
+    font-size: 0.78rem;
+  }
+}
+
+/* ===================== LANDSCAPE / TABLET ===================== */
+@media (min-width: 700px) {
+  .exam-header-row {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .exam-timer-row {
+    max-width: 900px;
+    margin: 8px auto 0;
+  }
+}
