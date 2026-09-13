@@ -37,9 +37,11 @@
 
   const btnExit = document.getElementById("btnExit");
   const btnHome = document.getElementById("btnHome");
+  const btnBack = document.getElementById("btnBack");
   const btnRefresh = document.getElementById("btnRefresh");
+  const btnForward = document.getElementById("btnForward");
 
-  const statusWifi = document.getElementById("statusWifi");
+  const statusClock = document.getElementById("statusClock");
   const statusBattery = document.getElementById("statusBattery");
 
   const timeUpOverlay = document.getElementById("timeUpOverlay");
@@ -62,11 +64,9 @@
   };
 
   fetchExamConfig();
-  updateWifiStatus();
-  initBatteryStatus();
-
-  window.addEventListener("online", updateWifiStatus);
-  window.addEventListener("offline", updateWifiStatus);
+  updateClock();
+  setInterval(updateClock, 15000);
+  setRandomBattery();
 
   // =====================================================================
   // FETCH CONFIG DARI GITHUB
@@ -188,6 +188,14 @@
     if (examUrlUjian) examFrame.src = examUrlUjian;
   });
 
+  btnBack.addEventListener("click", function () {
+    showToast("Tidak bisa navigasi mundur di dalam konten ujian.");
+  });
+
+  btnForward.addEventListener("click", function () {
+    showToast("Tidak bisa navigasi maju di dalam konten ujian.");
+  });
+
   btnRefresh.addEventListener("click", function () {
     // eslint-disable-next-line no-self-assign
     examFrame.src = examFrame.src;
@@ -243,34 +251,21 @@
   }
 
   // =====================================================================
-  // STATUS WIFI
+  // JAM (live, mengikuti waktu HP si pengguna)
   // =====================================================================
-  function updateWifiStatus() {
-    statusWifi.textContent = navigator.onLine ? "\uD83D\uDCE1 Online" : "\uD83D\uDCE1 Offline";
+  function updateClock() {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, "0");
+    const mm = String(now.getMinutes()).padStart(2, "0");
+    statusClock.textContent = "\uD83D\uDD50 " + hh + ":" + mm;
   }
 
   // =====================================================================
-  // STATUS BATERAI (Battery Status API — tidak didukung semua browser)
+  // BATERAI (SENGAJA DI-RANDOM 30-100%, BUKAN BACA BATERAI HP ASLI)
   // =====================================================================
-  function initBatteryStatus() {
-    if (!("getBattery" in navigator)) {
-      statusBattery.textContent = "\uD83D\uDD0B --%";
-      return;
-    }
-
-    navigator.getBattery().then(function (battery) {
-      renderBattery(battery);
-      battery.addEventListener("levelchange", function () { renderBattery(battery); });
-      battery.addEventListener("chargingchange", function () { renderBattery(battery); });
-    }).catch(function () {
-      statusBattery.textContent = "\uD83D\uDD0B --%";
-    });
-  }
-
-  function renderBattery(battery) {
-    const pct = Math.round(battery.level * 100);
-    const chargingMark = battery.charging ? "\u26A1" : "";
-    statusBattery.textContent = "\uD83D\uDD0B " + pct + "%" + chargingMark;
+  function setRandomBattery() {
+    const pct = Math.floor(Math.random() * (100 - 30 + 1)) + 30;
+    statusBattery.textContent = "\uD83D\uDD0B " + pct + "%";
   }
 
   // =====================================================================
